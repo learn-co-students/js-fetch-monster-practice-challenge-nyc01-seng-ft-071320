@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const createMonsterDiv = document.querySelector('#create-monster')
   const monsterContainer = document.querySelector('#monster-container')
   const backButton = document.querySelector('#back')
   const forwardButton = document.querySelector('#forward')
   let startIndex = 0
   let endIndex = 50
   let dataSize = 0
-  // let maxPage = dataSize % 50 === 0 ? dataSize / 20 : dataSize / 20 + 1
   let maxPage = 0
   let currentPage = 1
 
@@ -21,6 +21,47 @@ document.addEventListener('DOMContentLoaded', () => {
         getMonster()
       }
     })
+  }
+
+  const submitMonster = () => {
+    const form = createMonsterDiv.children[0]
+    form.addEventListener('submit', e => {
+      e.preventDefault()
+      const data =  {
+        name: e.target.name.value,
+        age: e.target.age.value,
+        description: e.target.description.value
+      }
+      fetch('http://localhost:3000/monsters', {
+        method: 'POST', 
+        headers: {
+          'Accept': 'application/json',
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(monster => {
+        if (currentPage === maxPage) {
+          createMonsterCard(monster)
+          endIndex += 1
+        }
+      })
+      .catch(e => console.log(e.message))
+      form.reset()
+    })
+  }
+
+  const createForm = () => {
+    const form = document.createElement('form')
+    form.innerHTML = `
+      <label for="name">Name</label><br>
+      <input type="text" name="name" placeholder="name...">
+      <input type="text" name="age" placeholder="age...">
+      <input type="text" name="description" placeholder="description...">
+      <input type="submit" value="Submit">
+    `
+    createMonsterDiv.append(form)
   }
 
   const getMonster = () => {
@@ -65,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (currentPage + 1 < maxPage) {
         currentPage += 1
         startIndex += 50
-        endIndex += 50
+        endIndex += currentPage * 50
       } else if (currentPage + 1 === maxPage) {
         currentPage += 1
         startIndex += 50
@@ -75,12 +116,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (currentPage > 1) {
         currentPage -= 1
         startIndex -= 50
-        endIndex -= 50
+        endIndex -= currentPage * 50
       }
     }
   }
 
-
+  createForm()
+  submitMonster()
   getMonster()
   clickHandler()
 })
