@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const newMonsterForm = document.createElement('form')
         newMonsterForm.id = 'monster-form'
         // newMonsterForm.classList.add('monster-form')    
-       
         newMonsterForm.innerHTML = `
         <label>Name: </label>
         <input type="text" name="name">
@@ -46,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <input type="text" name="description">
         <input type="submit" value="Add Monster">
         `
-
         createContainer.append(newMonsterForm)
      }
 
@@ -82,12 +80,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // resetMonsters()
         })
     }
-
     // const resetMonsters = () => {
     //     document.querySelector('#monster-form').reset()
     // }
     // Didn't reset page like I thought it would
-
     const clickHandler = () => {
         const back = document.querySelector('#back')
         const forward = document.querySelector('#forward')
@@ -110,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // clear page
         getMonsters()
     }
-
     getMonsters()
     createForm()
     submitHandler()
