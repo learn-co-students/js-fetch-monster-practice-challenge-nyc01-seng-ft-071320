@@ -32,28 +32,34 @@ const createForm = () => {
   const mForm = document.createElement("FORM");
   mForm.classList.add("monster-form");
 
-  const nameI = document.createElement("INPUT");
-  nameI.id = "name";
-  const ageI = document.createElement("INPUT");
-  ageI.id = "age";
-  const descI = document.createElement("INPUT");
-  descI.id = "description";
-  const submitB = document.createElement("button");
-
-  nameI.setAttribute("name", "name");
-  nameI.setAttribute("placeholder", "name");
-  ageI.setAttribute("age", "age");
-  ageI.setAttribute("placeholder", "age");
-  descI.setAttribute("description", "description");
-  descI.setAttribute("placeholder", "description");
-
-  submitB.innerText = "create";
-
-  mForm.append(nameI);
-  mForm.append(ageI);
-  mForm.append(descI);
-  mForm.append(submitB);
+  mForm.innerHTML =
+    '<input id="name" name="name" placeholder="name" />' +
+    '<input id="age" age="age" placeholder="age" />' +
+    '<input id="description" description="description" placeholder="description" />' +
+    "<button>create</button>";
   mDiv.append(mForm);
+
+  // const nameI = document.createElement("INPUT");
+  // nameI.id = "name";
+  // const ageI = document.createElement("INPUT");
+  // ageI.id = "age";
+  // const descI = document.createElement("INPUT");
+  // descI.id = "description";
+  // const submitB = document.createElement("button");
+
+  // nameI.setAttribute("name", "name");
+  // nameI.setAttribute("placeholder", "name");
+  // ageI.setAttribute("age", "age");
+  // ageI.setAttribute("placeholder", "age");
+  // descI.setAttribute("description", "description");
+  // descI.setAttribute("placeholder", "description");
+
+  // submitB.innerText = "create";
+
+  // mForm.append(nameI);
+  // mForm.append(ageI);
+  // mForm.append(descI);
+  // mForm.append(submitB);
 };
 
 const submitHandler = () => {
