@@ -1,84 +1,97 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let counter = 1
-    const monsterContainer = document.getElementById("monster-container")
-    const forwardBtn = document.getElementById("forward")
-    const backBtn = document.getElementById("back")
-    const createMonsterDiv = document.getElementById("create-monster")
-    let form = document.createElement('form')
-    form.innerHTML = `
-    <form id="monster-form">
-    <input id="name" placeholder="name..."></input>
-    <input id="age" placeholder="age..."></input>
-    <input id="description" placeholder="description..."></input>
-    <button>Create</button>
-    </form>
-    `
-    
-    createMonsterDiv.append(form)
-    
-    form.addEventListener('submit', (e) => {
-        e.preventDefault()
-        let name = document.getElementById('name').value
-        let age = document.getElementById('age').value
-        let description = document.getElementById('description').value
-        
-        let monsterObj = {
-            name: name,
-            age: age,
-            description: description
-        }
-        let configObj = {
-            method: "POST",
-            headers: {
-             'Content-Type': 'application/json',
-             'Accept': 'application/json'
-        },
-        body: JSON.stringify(monsterObj)
-          };
-
-       fetch("http://localhost:3000/monsters", configObj)
-       .then(resp => resp.json())
-       .then(data => console.log(data))
-          form.reset()
-    })
-    
+    let counter = 1;
+    const monsterCont = document.getElementById('monster-container');
+    const monsterForm = document.getElementById('create-monster');
+    const fwdBtn = document.getElementById('forward');
+    const bckBtn = document.getElementById('back');
+    const form = document.createElement('form');
     
     const getMonsters = () => {
-        let baseUrl = `http://localhost:3000/monsters/?_limit=50&_page=${counter}`
+        let baseUrl = `http://localhost:3000/monsters/?_limit=50&_page=${counter}`;
         fetch(baseUrl)
         .then(resp => resp.json())
-        .then(monsters => monsters.forEach(monster => renderMonster(monster)))
+        .then(monsters => renderMonsters(monsters))
+    }
+
+    const renderMonsters = (monsters) => {
+        for (const monster of monsters) {
+            renderMonster(monster)
+        }
     }
 
     const renderMonster = (monster) => {
-        const monsterDiv = document.createElement("div")
+        const monsterDiv = document.createElement('div');
         monsterDiv.dataset.id = monster.id
         monsterDiv.innerHTML = `
         <h2> ${monster.name} </h2>
         <h4> ${monster.age} </h4>
         <p> ${monster.description} </p>
         `
-        
-        monsterContainer.append(monsterDiv)
-        
-        
-    }    
-    forwardBtn.addEventListener("click", (e) => {
-            counter += 1
-                monsterContainer.innerHTML = ``
-                getMonsters()
+        monsterCont.append(monsterDiv)
+    }
 
-            } )
-    
-            backBtn.addEventListener("click", (e) => {
-                counter -= 1
-                monsterContainer.innerHTML = ``
-                getMonsters()
-            })
-  
+    const clickHandler = () => {
+        fwdBtn.addEventListener('click', (e) => {
+          counter += 1
+          console.log(counter);
+          monsterCont.innerHTML = "";
+          getMonsters();
+        })
+        bckBtn.addEventListener('click', (e) => {
+            counter -= 1
+            monsterCont.innerHTML = "";
+            getMonsters();
+        })
+    }
 
-    getMonsters()
+    const renderCreateForm = () => {
+        form.innerHTML = `
+        <form id="monster-form">
+        <input id="name" placeholder="name...">
+        <input id="age" placeholder="age...">
+        <input id="description" placeholder="description...">
+        <button>Create</button>
+        </form>
+        `
+        monsterForm.append(form);
+    }
+
+    const submitHandler = () => {
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            let monsterName = e.target.children[0].value;
+            let monsterAge = e.target.children[1].value;
+            let monsterDesc = e.target.children[2].value;
+
+            let monsterObj = { 
+               name: monsterName, 
+               age: monsterAge,
+               description: monsterDesc 
+                }
+
+            let configObj = {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(monsterObj)
+            };
+            form.reset();
+            createMonster(configObj)
+        })
+    }
+
+    const createMonster = (configObj) => {
+        fetch("http://localhost:3000/monsters", configObj)
+        .then(resp => resp.json())
+        .then(getMonsters())
+    }
 
 
-})
+   renderCreateForm();
+   getMonsters();
+   clickHandler();
+   submitHandler();
+});
 
